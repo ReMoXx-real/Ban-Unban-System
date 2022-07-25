@@ -1,0 +1,35 @@
+```command /ban [<offlineplayer>] [<text>]:
+    permission: ban.use
+    permission message: &cDu hast keine Rechte!
+    trigger:
+        if {ban.%uuid of arg 1%} is false:
+            if arg 2 is set:
+                send "&6Du hast %arg 1% für %arg 2% gebannt!"
+                set {ban.%uuid of arg 1%} to true
+                set {ban.grund.%uuid of arg 1%} to arg-2
+                kick arg 1 due to "&c&lDu wurdest gebannt! %nl%%nl%&7Grund: &6%{ban.grund.%uuid of arg 1%}%"
+        else:
+            send "&6Der Spieler existiert nicht oder ist bereits gebannt!"
+
+
+
+on connect:
+    if {ban.%uuid of player%} is not set:
+        set {ban.%uuid of player%} to false
+    else if {ban.%uuid of player%} is true:
+        kick player due to "&c&lDu wurdest gebannt! %nl%%nl%&7Grund: &6%{ban.grund.%uuid of player%}%"
+
+
+
+
+
+command /unban [<offlineplayer>]:
+    permission: unban.use
+    permission message: &cKeine Rechte!
+    trigger:
+        if arg 1 is set:
+            if {ban.%uuid of arg 1%} is true:
+                delete {ban.%uuid of arg 1%}
+                send "&6Du hast %arg 1% entbannt."
+            else:
+                send "&cDieser Spieler ist nicht gebannt!" ```
